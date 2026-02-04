@@ -1,0 +1,22 @@
+[project]
+name = "rpl-structural-attack-observability"
+version = "0.1.0"
+description = "Prototype implementation for analyzing selective forwarding observability in RPL/BRPL networks."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "이건형"}]
+dependencies = [
+  "pandas>=2.2.0",
+  "numpy>=1.26.0",
+  "networkx>=3.2.0",
+]
+
+[project.scripts]
+rpl-observability-analyze = "rpl_observability.cli:main"
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+addopts = "-q"
