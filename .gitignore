@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Contiki-NG build artifacts
+*.cooja
+*.o
+*.a
+*.map
+*.elf
+*.hex
+symbols.c
+symbols.h
+*.log
+*.testlog
+
+# Simulation outputs
+simulations/output/*.log
+simulations/output/*.testlog
+simulations/output/*.pcap
+
+# Data outputs
+data/*.csv
+!data/*_template.csv
+
+# Results
+results/
+
+# OS
+.DS_Store
+Thumbs.db

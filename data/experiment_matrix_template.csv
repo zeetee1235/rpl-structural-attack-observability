@@ -1,0 +1,2 @@
+scenario,protocol,attack_rate,seed,simulation,attacker_id,root_id
+scenario_a,rpl-classic,0.0,1,simulations/scenarios/rpl_topology_10nodes.csc,6,1
