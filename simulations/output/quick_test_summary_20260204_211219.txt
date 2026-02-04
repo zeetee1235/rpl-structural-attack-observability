@@ -1,0 +1,15 @@
+Quick Test Results - 2026. 02. 04. (수) 21:12:19 KST
+======================================
+
+Scenario: scenario_a_low_exposure
+  Rate 0.0: FAILED
+  Rate 0.6: FAILED
+
+Scenario: scenario_b_high_exposure
+  Rate 0.0: FAILED
+  Rate 0.6: FAILED
+
+Scenario: scenario_c_high_pd
+  Rate 0.0: FAILED
+  Rate 0.6: FAILED
+

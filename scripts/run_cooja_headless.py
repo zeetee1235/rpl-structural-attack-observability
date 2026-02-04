@@ -71,6 +71,10 @@ class CoojaRunner:
         log_file = output_dir / f"{sim_name}_{timestamp}.log"
         testlog_file = output_dir / f"{sim_name}_{timestamp}_COOJA.testlog"
         
+        # Resolve absolute paths
+        contiki_abs = self.contiki_path.resolve()
+        cooja_abs = self.cooja_path.resolve()
+        
         # Build command
         cmd = [
             "java",
@@ -79,8 +83,8 @@ class CoojaRunner:
             "--enable-preview",
             "-jar", str(self.cooja_jar),
             "--no-gui",
-            "--contiki=" + str(self.contiki_path),
-            "--cooja=" + str(self.cooja_path),
+            "--contiki=" + str(contiki_abs),
+            "--cooja=" + str(cooja_abs),
             "--logdir=" + str(output_dir),
         ]
         cmd.append(str(simulation_file))
@@ -99,8 +103,11 @@ class CoojaRunner:
             print(f"[INFO]   ATTACK_RATE={attack_rate or 0.0}")
             print(f"[INFO]   ROOT_ID={root_id or 1}")
             
+            # Resolve absolute paths for environment
+            contiki_abs = self.contiki_path.resolve()
+            
             build_env = dict(**os.environ)
-            build_env["CONTIKI"] = str(self.contiki_path)
+            build_env["CONTIKI"] = str(contiki_abs)
             if attacker_id is not None:
                 build_env["ATTACKER_ID"] = str(attacker_id)
             if attack_rate is not None:
@@ -152,8 +159,11 @@ class CoojaRunner:
         try:
             # Run Cooja with output capture
             with open(log_file, 'w') as log_fh:
+                # Resolve absolute paths for environment
+                contiki_abs = self.contiki_path.resolve()
+                
                 env = dict(**os.environ)
-                env["CONTIKI"] = str(self.contiki_path)
+                env["CONTIKI"] = str(contiki_abs)
                 if routing:
                     routing_map = {
                         "rpl-lite": "MAKE_ROUTING_RPL_LITE",

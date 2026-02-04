@@ -1,7 +1,8 @@
 CONTIKI_PROJECT = rpl-node
 all: $(CONTIKI_PROJECT)
 
-CONTIKI ?= ../../contiki-ng-brpl
+# Try to find CONTIKI directory
+CONTIKI ?= $(shell if [ -d ../../contiki-ng-brpl ]; then realpath ../../contiki-ng-brpl; elif [ -d ../../../contiki-ng-brpl ]; then realpath ../../../contiki-ng-brpl; else echo "../../contiki-ng-brpl"; fi)
 
 MAKE_ROUTING ?= MAKE_ROUTING_RPL_CLASSIC
 MAKE_MAC ?= MAKE_MAC_CSMA
