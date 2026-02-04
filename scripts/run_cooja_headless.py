@@ -8,6 +8,7 @@ import argparse
 import subprocess
 import sys
 import os
+import shutil
 from pathlib import Path
 from datetime import datetime
 
@@ -189,6 +190,11 @@ class CoojaRunner:
                     env=env,
                 )
             
+            # Persist COOJA.testlog per run if it exists
+            cooja_testlog = output_dir / "COOJA.testlog"
+            if cooja_testlog.exists():
+                shutil.copy2(cooja_testlog, testlog_file)
+
             # Check if simulation succeeded
             success = result.returncode == 0
             

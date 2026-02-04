@@ -14,17 +14,23 @@ ATTACKER_ID=6
 ROOT_ID=1
 ROUTING="rpl"
 
-# Scenarios to test
-SCENARIOS=(
-    "scenario_a_low_exposure"
-    "scenario_b_high_exposure"
-    "scenario_b_high_exposure_20"
-    "scenario_c_high_pd"
-    "scenario_d_apl_bc"
-)
+# Scenario-specific plan:
+# - B(10), C(10): alpha {0,0.4,0.8,1.0}, N=5
+# - A, D: alpha {0,1.0}, N=3
+# - B(20): alpha {0,0.8,1.0}, N=3
+SCENARIO_A="scenario_a_low_exposure"
+SCENARIO_B="scenario_b_high_exposure"
+SCENARIO_B20="scenario_b_high_exposure_20"
+SCENARIO_C="scenario_c_high_pd"
+SCENARIO_D="scenario_d_apl_bc"
 
-# Attack rates to test
-ATTACK_RATES=(0.0 0.2 0.4 0.6 0.8 1.0)
+ATTACK_RATES_BC=(0.0 0.4 0.8 1.0)
+ATTACK_RATES_AD=(0.0 1.0)
+ATTACK_RATES_B20=(0.0 0.8 1.0)
+
+REPEATS_BC=5
+REPEATS_AD=3
+REPEATS_B20=3
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -45,13 +51,11 @@ echo "  Cooja: $COOJA_PATH"
 echo "  Contiki: $CONTIKI_PATH"
 echo "  Output: $OUTPUT_DIR"
 echo "  Timeout: ${TIMEOUT}s"
-echo "  Scenarios: ${#SCENARIOS[@]}"
-echo "  Attack rates: ${#ATTACK_RATES[@]}"
-echo "  Total runs: $((${#SCENARIOS[@]} * ${#ATTACK_RATES[@]}))"
+total_runs=$(( ( ${#ATTACK_RATES_BC[@]} * REPEATS_BC * 2 ) + ( ${#ATTACK_RATES_AD[@]} * REPEATS_AD * 2 ) + ( ${#ATTACK_RATES_B20[@]} * REPEATS_B20 ) ))
+echo "  Scenarios: 5 (A,B,B20,C,D)"
+echo "  Total runs: $total_runs"
 echo ""
 
-# Counter
-total_runs=$((${#SCENARIOS[@]} * ${#ATTACK_RATES[@]}))
 current_run=0
 successful_runs=0
 failed_runs=0
@@ -60,61 +64,59 @@ failed_runs=0
 LOG_FILE="$OUTPUT_DIR/experiment_run_$(date +%Y%m%d_%H%M%S).log"
 echo "Experiment started at $(date)" > "$LOG_FILE"
 
-# Run experiments
-for scenario in "${SCENARIOS[@]}"; do
-    scenario_file="simulations/scenarios/${scenario}.csc"
-    
+run_case() {
+    local scenario="$1"
+    local rates=("${!2}")
+    local repeats="$3"
+
+    local scenario_file="simulations/scenarios/${scenario}.csc"
     if [ ! -f "$scenario_file" ]; then
         echo -e "${RED}[ERROR]${NC} Scenario file not found: $scenario_file"
-        continue
+        return
     fi
-    
-    echo -e "\n${BLUE}[SCENARIO]${NC} $scenario"
-    
-    for rate in "${ATTACK_RATES[@]}"; do
-        current_run=$((current_run + 1))
-        
-        echo -e "${YELLOW}  [$current_run/$total_runs]${NC} Testing attack_rate=$rate..."
-        
-        start_time=$(date +%s)
-        
-        # Run simulation
-        if python3 scripts/run_cooja_headless.py \
-            --cooja-path "$COOJA_PATH" \
-            --contiki-path "$CONTIKI_PATH" \
-            --simulation "$scenario_file" \
-            --output-dir "$OUTPUT_DIR" \
-            --timeout "$TIMEOUT" \
-            --attacker-id "$ATTACKER_ID" \
-            --attack-rate "$rate" \
-            --root-id "$ROOT_ID" \
-            --routing "$ROUTING" \
-            >> "$LOG_FILE" 2>&1; then
-            
-            end_time=$(date +%s)
-            duration=$((end_time - start_time))
-            
-            echo -e "${GREEN}    ✓${NC} Completed in ${duration}s"
-            successful_runs=$((successful_runs + 1))
-            
-            # Quick stats
-            if [ -f "$OUTPUT_DIR/COOJA.testlog" ]; then
-                drops=$(grep -c "DATA_DROP" "$OUTPUT_DIR/COOJA.testlog" || echo "0")
-                fwds=$(grep -c "DATA_FWD" "$OUTPUT_DIR/COOJA.testlog" || echo "0")
-                echo "      DROP: $drops, FWD: $fwds"
+
+    echo -e "\n${BLUE}[SCENARIO]${NC} $scenario (repeats=$repeats)"
+
+    for rate in "${rates[@]}"; do
+        for ((rep=1; rep<=repeats; rep++)); do
+            current_run=$((current_run + 1))
+            echo -e "${YELLOW}  [$current_run/$total_runs]${NC} attack_rate=$rate (rep $rep/$repeats)..."
+
+            start_time=$(date +%s)
+
+            if python3 scripts/run_cooja_headless.py \
+                --cooja-path "$COOJA_PATH" \
+                --contiki-path "$CONTIKI_PATH" \
+                --simulation "$scenario_file" \
+                --output-dir "$OUTPUT_DIR" \
+                --timeout "$TIMEOUT" \
+                --attacker-id "$ATTACKER_ID" \
+                --attack-rate "$rate" \
+                --root-id "$ROOT_ID" \
+                --routing "$ROUTING" \
+                >> "$LOG_FILE" 2>&1; then
+
+                end_time=$(date +%s)
+                duration=$((end_time - start_time))
+                echo -e "${GREEN}    ✓${NC} Completed in ${duration}s"
+                successful_runs=$((successful_runs + 1))
+            else
+                end_time=$(date +%s)
+                duration=$((end_time - start_time))
+                echo -e "${RED}    ✗${NC} Failed after ${duration}s"
+                failed_runs=$((failed_runs + 1))
             fi
-        else
-            end_time=$(date +%s)
-            duration=$((end_time - start_time))
-            
-            echo -e "${RED}    ✗${NC} Failed after ${duration}s"
-            failed_runs=$((failed_runs + 1))
-        fi
-        
-        # Brief pause between runs
-        sleep 2
+
+            sleep 2
+        done
     done
-done
+}
+
+run_case "$SCENARIO_B" ATTACK_RATES_BC[@] "$REPEATS_BC"
+run_case "$SCENARIO_C" ATTACK_RATES_BC[@] "$REPEATS_BC"
+run_case "$SCENARIO_A" ATTACK_RATES_AD[@] "$REPEATS_AD"
+run_case "$SCENARIO_D" ATTACK_RATES_AD[@] "$REPEATS_AD"
+run_case "$SCENARIO_B20" ATTACK_RATES_B20[@] "$REPEATS_B20"
 
 echo ""
 echo -e "${BLUE}========================================${NC}"

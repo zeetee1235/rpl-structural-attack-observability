@@ -1,0 +1,16 @@
+"scenario","attack_rate_logged","mean","sd","n","ci"
+"scenario_a_low_exposure",0,1,0,3,0
+"scenario_b_high_exposure",0,1,0,5,0
+"scenario_b_high_exposure_20",0,1,0,3,0
+"scenario_c_high_pd",0,1,0,5,0
+"scenario_d_apl_bc",0,1,0,3,0
+"scenario_b_high_exposure",0.4,0.6438,0,5,0
+"scenario_c_high_pd",0.4,0.8074,0,5,0
+"scenario_b_high_exposure",0.8,0.2782,0,5,0
+"scenario_b_high_exposure_20",0.8,0.2449,0,3,0
+"scenario_c_high_pd",0.8,0.6378,0,5,0
+"scenario_a_low_exposure",1,1,0,3,0
+"scenario_b_high_exposure",1,0.1116,0,5,0
+"scenario_b_high_exposure_20",1,0.0528,0,3,0
+"scenario_c_high_pd",1,0.5579,0,5,0
+"scenario_d_apl_bc",1,1,0,3,0

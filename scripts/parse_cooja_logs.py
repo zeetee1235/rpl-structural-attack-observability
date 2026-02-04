@@ -81,6 +81,13 @@ class CoojaLogParser:
     def _time_window(self, ts_ms: int) -> str:
         idx = ts_ms // (self.window_seconds * 1000)
         return f"t{idx + 1}"
+
+    def _normalize_delay(self, delay_ms: float) -> float:
+        if delay_ms > 1e9:
+            delay_ms -= 2 ** 32
+        if delay_ms < 0:
+            return 0.0
+        return delay_ms
     
     def parse(self, scenario: str = "default") -> None:
         """
@@ -147,7 +154,7 @@ class CoojaLogParser:
             if ev == "DELAY":
                 src = int(fields.get("src", "0"))
                 delay = float(fields.get("delay_ms", "0"))
-                delays[src].append(delay)
+                delays[src].append(self._normalize_delay(delay))
 
             if ev == "DATA_RX":
                 attacker_rx[window] += 1
@@ -177,6 +184,8 @@ class CoojaLogParser:
             drops = drop_counts.get(node_id, 0)
 
             pdr = (rx / tx) if tx > 0 else 0.0
+            if pdr > 1.0:
+                pdr = 1.0
 
             node_delays = delays.get(node_id, [])
             avg_delay = sum(node_delays) / len(node_delays) if node_delays else 0.0

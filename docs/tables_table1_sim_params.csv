@@ -1,0 +1,6 @@
+"parameter","value"
+"node count","10, 20"
+"attack rate α","scenario-specific"
+"queue size","200 packets"
+"MAC/RDC","CSMA / NULLRDC"
+"duration","3600s"

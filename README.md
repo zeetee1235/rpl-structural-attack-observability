@@ -45,6 +45,7 @@ rpl-observability-analyze \
 
 ## Documentation
 
+- **[Paper (PDF)](docs/paper.pdf)** - Current draft report
 - **[Setup Guide](docs/setup_guide.md)** - Installation and configuration
 - **[Attack Rate Guide](docs/attack_rate_guide.md)** - Troubleshooting attack parameters
 - **[Changelog](docs/changelog.md)** - Version history and updates
