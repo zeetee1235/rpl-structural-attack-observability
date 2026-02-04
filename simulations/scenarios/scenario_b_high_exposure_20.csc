@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simconf>
+  <project EXPORT="discard">[APPS_DIR]/mrm</project>
+  <project EXPORT="discard">[APPS_DIR]/mspsim</project>
+  <project EXPORT="discard">[APPS_DIR]/avrora</project>
+  <project EXPORT="discard">[APPS_DIR]/serial_socket</project>
+  <project EXPORT="discard">[APPS_DIR]/powertracker</project>
+
+  <simulation>
+    <title>Scenario B - High Exposure (20 nodes)</title>
+    <randomseed>123456</randomseed>
+    <motedelay_us>1000000</motedelay_us>
+    <radiomedium>
+      org.contikios.cooja.radiomediums.UDGM
+      <transmitting_range>50.0</transmitting_range>
+      <interference_range>100.0</interference_range>
+      <success_ratio_tx>1.0</success_ratio_tx>
+      <success_ratio_rx>1.0</success_ratio_rx>
+    </radiomedium>
+    <events>
+      <logoutput>40000</logoutput>
+    </events>
+    <motetype>
+      org.contikios.cooja.contikimote.ContikiMoteType
+      <identifier>rplnode</identifier>
+      <description>RPL Node</description>
+      <source>[CONFIG_DIR]/../firmware/rpl-node.c</source>
+      <commands>make rpl-node.cooja TARGET=cooja</commands>
+      <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.Battery</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiVib</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiMoteID</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiRS232</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiBeeper</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiRadio</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiButton</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiPIR</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiClock</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiLED</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiCFS</moteinterface>
+      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiEEPROM</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.Mote2MoteRelations</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.MoteAttributes</moteinterface>
+    </motetype>
+
+    <!-- Root -->
+    <mote>
+      <interface_config>
+        org.contikios.cooja.interfaces.Position
+        <x>0.0</x>
+        <y>0.0</y>
+        <z>0.0</z>
+      </interface_config>
+      <interface_config>
+        org.contikios.cooja.contikimote.interfaces.ContikiMoteID
+        <id>1</id>
+      </interface_config>
+      <motetype_identifier>rplnode</motetype_identifier>
+    </mote>
+
+    <!-- Attacker (cut-vertex) -->
+    <mote>
+      <interface_config>
+        org.contikios.cooja.interfaces.Position
+        <x>30.0</x>
+        <y>0.0</y>
+        <z>0.0</z>
+      </interface_config>
+      <interface_config>
+        org.contikios.cooja.contikimote.interfaces.ContikiMoteID
+        <id>6</id>
+      </interface_config>
+      <motetype_identifier>rplnode</motetype_identifier>
+    </mote>
+
+    <!-- Senders (2-5,7-20) all beyond attacker -->
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>60.0</x><y>0.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>2</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>60.0</x><y>10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>3</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>60.0</x><y>-10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>4</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>70.0</x><y>0.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>5</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>70.0</x><y>10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>7</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>70.0</x><y>-10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>8</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>80.0</x><y>0.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>9</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>80.0</x><y>10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>10</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>80.0</x><y>-10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>11</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>90.0</x><y>0.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>12</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>90.0</x><y>10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>13</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>90.0</x><y>-10.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>14</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>80.0</x><y>20.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>15</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>80.0</x><y>-20.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>16</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>90.0</x><y>20.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>17</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>90.0</x><y>-20.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>18</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>85.0</x><y>30.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>19</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+    <mote><interface_config>org.contikios.cooja.interfaces.Position<x>85.0</x><y>-30.0</y><z>0.0</z></interface_config><interface_config>org.contikios.cooja.contikimote.interfaces.ContikiMoteID<id>20</id></interface_config><motetype_identifier>rplnode</motetype_identifier></mote>
+  </simulation>
+
+  <plugin>
+    org.contikios.cooja.plugins.ScriptRunner
+    <plugin_config>
+      <script>TIMEOUT(3600000, log.testOK());
+
+while(true) {
+  YIELD();
+  log.log(time + " " + "node-" + id + " " + msg + "\n");
+}</script>
+      <active>true</active>
+    </plugin_config>
+    <width>600</width>
+    <z>1</z>
+    <height>400</height>
+    <location_x>500</location_x>
+    <location_y>0</location_y>
+  </plugin>
+</simconf>

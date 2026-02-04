@@ -64,5 +64,6 @@ See `simulations/scenarios/SCENARIO_COORDINATES.md` for the four baseline scenar
 
 - `simulations/scenarios/scenario_a_low_exposure.csc`
 - `simulations/scenarios/scenario_b_high_exposure.csc`
+- `simulations/scenarios/scenario_b_high_exposure_20.csc`
 - `simulations/scenarios/scenario_c_high_pd.csc`
 - `simulations/scenarios/scenario_d_apl_bc.csc`

@@ -31,6 +31,36 @@ rpl-observability-analyze \
 The CLI expects CSV logs described in `data/README.md`. It outputs a merged summary with computed
 structural metrics and basic observability statistics.
 
+## Recent Updates (2026-02-04)
+
+### ATTACK_RATE Parameter Application Fix
+
+Fixed critical issue where ATTACK_RATE was not being properly applied to firmware during compilation:
+
+- **Problem**: ATTACK_RATE showed 0.00 in logs despite being configured (e.g., 0.6)
+- **Root Cause**: Environment variables from Python runner weren't propagating to Cooja's make command
+- **Solution**: Implemented pre-build firmware strategy in [scripts/run_cooja_headless.py](scripts/run_cooja_headless.py)
+  - Firmware is now built with explicit parameters before Cooja starts
+  - Clean + make with `ATTACKER_ID=X ATTACK_RATE=Y ROOT_ID=Z`
+  - Ensures compile-time constants are baked into binary
+- **Verification**: 
+  - Test script: [scripts/test_attack_rate.sh](scripts/test_attack_rate.sh)
+  - Simulation confirmed: ATTACK_RATE=0.6 → actual drop rate 59.1% (statistically matches expected)
+  - See [docs/attack_rate_guide.md](docs/attack_rate_guide.md) for troubleshooting guide
+
+### New Test & Monitoring Scripts
+
+- [scripts/test_firmware_build.sh](scripts/test_firmware_build.sh) - Test firmware compilation with different ATTACK_RATE values
+- [scripts/test_attack_rate.sh](scripts/test_attack_rate.sh) - End-to-end simulation test with attack validation
+- [scripts/monitor_simulation.sh](scripts/monitor_simulation.sh) - Real-time monitoring of running simulations
+- [scripts/monitor_simulation.py](scripts/monitor_simulation.py) - Python-based simulation monitor
+
+### Configuration Updates
+
+- All .csc scenario files simplified to use basic make commands
+- Pre-build strategy handles parameter passing in Python layer
+- Firmware directory structure supports both standalone and simulation-relative paths
+
 ## Running Cooja Simulations
 
 This project supports headless Cooja simulations to generate experimental data automatically.

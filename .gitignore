@@ -26,6 +26,9 @@ symbols.c
 symbols.h
 *.log
 *.testlog
+build/
+.deps/
+obj/
 
 # Simulation outputs
 simulations/output/*.log

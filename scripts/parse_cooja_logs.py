@@ -61,11 +61,13 @@ class CoojaLogParser:
         self.attack_exposure_rows: List[Dict[str, object]] = []
         
         self.patterns = {
-            'obs': re.compile(r'^OBS\\s+'),
+            'obs': re.compile(r'^OBS\s+'),
         }
 
     def _parse_obs_line(self, line: str) -> Dict[str, str]:
         line = line.strip()
+        if "OBS " in line and not line.startswith("OBS "):
+            line = line[line.index("OBS "):]
         if not self.patterns["obs"].match(line):
             return {}
         parts = line.split()

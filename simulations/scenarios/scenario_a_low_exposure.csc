@@ -24,18 +24,16 @@
       org.contikios.cooja.contikimote.ContikiMoteType
       <identifier>rplnode</identifier>
       <description>RPL Node</description>
-      <source>[CONFIG_DIR]/firmware/rpl-node.c</source>
+      <source>[CONFIG_DIR]/../firmware/rpl-node.c</source>
       <commands>make rpl-node.cooja TARGET=cooja</commands>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.Battery</moteinterface>
-      <moteinterface>org.contikios.cooja.interfaces.LED</moteinterface>
-      <moteinterface>org.contikios.cooja.interfaces.Radio</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiVib</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiMoteID</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiRS232</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiBeeper</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
-      <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiIPAddress</moteinterface>
+      <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiRadio</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiButton</moteinterface>
       <moteinterface>org.contikios.cooja.contikimote.interfaces.ContikiPIR</moteinterface>
@@ -193,10 +191,11 @@
     org.contikios.cooja.plugins.ScriptRunner
     <plugin_config>
       <script>TIMEOUT(3600000, log.testOK());
-+
-+while(true) {
-+  YIELD();
-+}</script>
+
+while(true) {
+  YIELD();
+  log.log(time + " " + "node-" + id + " " + msg + "\n");
+}</script>
       <active>true</active>
     </plugin_config>
     <width>600</width>
